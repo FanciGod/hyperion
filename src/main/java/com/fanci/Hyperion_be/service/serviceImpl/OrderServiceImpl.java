@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,10 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final ProductDetailRepository productDetailRepository;
-    private final NotificationServiceImpl notificationServiceImpl;
-    private final PaypalService paypalService;
 
+    private final NotificationServiceImpl notificationServiceImpl;
+
+    private final PaypalService paypalService;
 
     private final ProductDetailServiceImpl productDetailServiceImpl;
 
@@ -55,6 +57,12 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderResponse> findAllOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         return orderRepository.findAll(pageable).map(this::toOrderResponse);
+    }
+    @Override
+    public List<OrderResponse> findAllOrdersInCurrentMonth(){
+        LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+        LocalDateTime endOfMonth = LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()).atTime(23, 59, 59);
+    return orderRepository.findOrdersInMonth(startOfMonth,endOfMonth).stream().map(this::toOrderResponse).toList();
     }
 
     @Override

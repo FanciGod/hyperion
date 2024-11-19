@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +22,13 @@ public class OrderController {
     public ApiResponse<Page<OrderResponse>> findAllOrders(@RequestParam int page, @RequestParam int size) {
         return ApiResponse.<Page<OrderResponse>>builder()
                 .result(orderService.findAllOrders(page, size))
+                .build();
+    }
+
+    @GetMapping("month")
+    public ApiResponse<List<OrderResponse>> findAllOrdersInMonth(){
+        return ApiResponse.<List<OrderResponse>>builder()
+                .result(orderService.findAllOrdersInCurrentMonth())
                 .build();
     }
 

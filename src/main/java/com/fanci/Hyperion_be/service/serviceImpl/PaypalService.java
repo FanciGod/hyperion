@@ -22,7 +22,6 @@ public class PaypalService {
     private final PayPalHttpClient payPalHttpClient;
 
     public String createOrder(Double totalAmount, Long orderId) throws IOException {
-        // Tạo đơn hàng
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
 
@@ -33,7 +32,6 @@ public class PaypalService {
                 .returnUrl("http://localhost:4200/payment/"+orderId);
         orderRequest.applicationContext(applicationContext);
 
-        // Thêm thông tin thanh toán
         PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
                 .referenceId(orderId.toString())
                 .amountWithBreakdown(new AmountWithBreakdown()

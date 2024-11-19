@@ -5,9 +5,12 @@ import com.fanci.Hyperion_be.dto.response.OrderResponse;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface OrderService {
     Page<OrderResponse> findAllOrders(int page, int size);
+
+    List<OrderResponse> findAllOrdersInCurrentMonth();
 
     OrderResponse findOrderById(Long id);
 

@@ -8,7 +8,6 @@ import com.fanci.Hyperion_be.entity.Role;
 import com.fanci.Hyperion_be.enums.NotificationStatus;
 import com.fanci.Hyperion_be.exception.AppException;
 import com.fanci.Hyperion_be.exception.ErrorCode;
-import com.fanci.Hyperion_be.mapper.NotificationMapper;
 import com.fanci.Hyperion_be.repository.NotificationRepository;
 import com.fanci.Hyperion_be.repository.RoleRepository;
 import com.fanci.Hyperion_be.repository.UserRepository;

@@ -4,7 +4,6 @@ import com.fanci.Hyperion_be.dto.ProductSubCategoryDto;
 import com.fanci.Hyperion_be.dto.request.CreateNewProductCategoryRequest;
 import com.fanci.Hyperion_be.dto.response.ProductCategoryResponse;
 import com.fanci.Hyperion_be.dto.response.ProductCategoryResponseSimple;
-import com.fanci.Hyperion_be.dto.response.ProductSubCategoryResponse;
 import com.fanci.Hyperion_be.entity.ProductCategory;
 import com.fanci.Hyperion_be.entity.ProductSubCategory;
 import com.fanci.Hyperion_be.exception.AppException;
@@ -44,12 +43,6 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public List<ProductCategoryResponse> findAllProductCategories() {
         List<ProductCategory> productCategoryList = productCategoryRepository.findAll();
 
-        //        productCategoryList.forEach(productCategory1 -> {
-//            List<ProductSubCategoryDto> productSubCategoryDtoList = productCategory1.getProductSubCategories().stream().map(this::toProductSubCategoryDto).toList();
-//            productCategoryResponseList.forEach(productCategoryResponse -> {
-//                productCategoryResponse.setProductSubCategoryDtoList(productSubCategoryDtoList);
-//            });
-//        });
         return productCategoryList.stream().map(productCategory -> {
             ProductCategoryResponse productCategoryResponse = productCategoryMapper.toProductCategoryResponse(productCategory);
             List<ProductSubCategoryDto> productSubCategoryDtoList = productSubCategoryRepository.findAllProductSubCategoryByProductCategoryName(productCategory.getName()).stream().map(this::toProductSubCategoryDto).toList();

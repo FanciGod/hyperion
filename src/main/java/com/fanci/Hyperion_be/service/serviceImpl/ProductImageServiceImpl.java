@@ -11,7 +11,6 @@ import com.fanci.Hyperion_be.mapper.ProductImageMapper;
 import com.fanci.Hyperion_be.repository.ProductImageRepository;
 import com.fanci.Hyperion_be.service.ProductImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,8 +26,6 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     private final ProductImageRepository productImageRepository;
 
-    private final UploadService uploadService;
-
 
     private final ProductImageMapper productImageMapper;
 
@@ -40,7 +37,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
         List<ProductImage> productImages = new ArrayList<>();
         for (MultipartFile image : images) {
-            Map<String, Object> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
+            Map<?,?> uploadResult = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.emptyMap());
             String url = uploadResult.get("url").toString();
             String publicId = uploadResult.get("public_id").toString();
 
@@ -63,7 +60,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public String deleteImage(Long id) throws IOException {
         var productImage = productImageRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.IMAGE_ID_NOT_FOUND));
-        Map<String, Object> destroyResult = cloudinary.uploader().destroy(productImage.getPublicId(), ObjectUtils.emptyMap());
+        Map<?,?> destroyResult = cloudinary.uploader().destroy(productImage.getPublicId(), ObjectUtils.emptyMap());
         productImageRepository.delete(productImage);
         return destroyResult.get("result").toString();
     }

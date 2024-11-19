@@ -52,19 +52,18 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         Product product = productRepository.findProductByProductId(request.getProductId()).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_ID_NOT_FOUND));
         productDetail.setProduct(product);
 
-        //add handlebar
-
-        if (request.getHandlebarId() != null) {
-            var productHandlebar = productHandlebarRepository.findByProductHandlebarId(request.getHandlebarId()).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_HANDLEBAR_ID_NOT_FOUND));
-            productDetail.setProductHandlebar(productHandlebar);
-        }
-
-
         //add material
 
         if (request.getMaterialId() != null) {
             ProductMaterial productMaterial = productMaterialRepository.findByProductMaterialId(request.getMaterialId()).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_MATERIAL_ID_NOT_FOUND));
             productDetail.setProductMaterial(productMaterial);
+        }
+
+        //add handlebar
+
+        if (request.getHandlebarId() != null) {
+            var productHandlebar = productHandlebarRepository.findByProductHandlebarId(request.getHandlebarId()).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_HANDLEBAR_ID_NOT_FOUND));
+            productDetail.setProductHandlebar(productHandlebar);
         }
 
         //add color

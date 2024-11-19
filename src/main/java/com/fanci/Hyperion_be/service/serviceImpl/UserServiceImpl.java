@@ -54,9 +54,14 @@ public class UserServiceImpl implements UserService {
             throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
         }
 
-        if (userRepository.findUserByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.existsUserByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USERNAME_DUPLICATED);
         }
+
+        if(userRepository.existsUserByEmail(request.getEmail())){
+            throw new AppException(ErrorCode.EMAIL_DUPLICATED);
+        }
+
 
         String password = passwordEncoder.encode(request.getPassword());
 
