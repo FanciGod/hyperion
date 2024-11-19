@@ -51,10 +51,7 @@ export class Interceptor implements HttpInterceptor {
         if (error.status === 401 && token) {
           return this.authService.refreshToken(token).pipe(
             switchMap((res: ApiResponse<{token:string}>) => {
-              const newToken = res.result.token;
-              console.log(res.result.token);
-              console.log(res)
-              
+              const newToken = res.result.token;              
               localStorage.setItem('token', newToken);
               const newReq = req.clone({ setHeaders: { Authorization: `Bearer ${res.result.token}` } });
               return next.handle(newReq);
