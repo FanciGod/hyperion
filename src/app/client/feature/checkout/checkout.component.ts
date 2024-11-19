@@ -15,14 +15,14 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent {
-  order!:Order;
+  order!: Order;
   isSubmitting = false;
   paymentMethods: PaymentMethod[] = []
   customerForm!: FormGroup;
   totalPrice: number = 0;
   cart: CartItem[] = [];
 
-  constructor(private fb: FormBuilder, private cartService: CartService, private checkoutService: CheckoutService, private router: Router, private toastrService:ToastrService) { }
+  constructor(private fb: FormBuilder, private cartService: CartService, private checkoutService: CheckoutService, private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit(): void {
     this.getCartItem()
@@ -40,6 +40,11 @@ export class CheckoutComponent {
 
   onSubmit(): void {
     if (this.customerForm.valid) {
+      let totalAmount = this.cart.reduce((total, item) => total + item.amount, 0);
+      if (totalAmount === 0) {
+        this.toastrService.error("Must select a product first", "Checkout Notification");
+        return;
+      }
       this.isSubmitting = true;
       const orderForm: OrderForm = {
         customerName: this.customerForm.get("customerName")?.value,
@@ -59,8 +64,8 @@ export class CheckoutComponent {
         next: (res) => {
           if (res.result.paymentUrl) {
             window.location.href = res.result.paymentUrl;
-          }else{         
-            this.router.navigate(['/payment',res.result.id])
+          } else {
+            this.router.navigate(['/payment', res.result.id])
           }
 
         },

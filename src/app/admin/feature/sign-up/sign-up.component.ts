@@ -27,9 +27,9 @@ export class SignUpComponent implements OnInit {
       rePassword: ['', Validators.required],
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
+      phone: ['', Validators.required,],
       image: [null],
-      roles: this.fb.array([])
+      roles: this.fb.array([]),
     });
   }
 
@@ -38,41 +38,27 @@ export class SignUpComponent implements OnInit {
   }
 
   onSubmit(): void {
-
-    if (this.signUpForm.valid) {
-      this.isSubmitting = true
-      const formData = new FormData();
-      formData.append('username', this.signUpForm.value.username);
-      formData.append('password', this.signUpForm.value.password);
-      formData.append('rePassword', this.signUpForm.value.rePassword);
-      formData.append('fullName', this.signUpForm.value.fullName);
-      formData.append('email', this.signUpForm.value.email);
-      formData.append('phone', this.signUpForm.value.phone);
-      if (this.signUpForm.value.image) {
-        formData.append('image', this.signUpForm.value.image);
+  if (this.signUpForm.valid) {
+    this.isSubmitting = true;
+    const formData = this.createFormData();
+    this.signUpService.signUp(formData).subscribe({
+      next: () => {
+        this.toastrService.success('User created successfully', 'User Notification');
+        this.isSubmitting = false;
+        this.router.navigate(['/admin']);
+      },
+      error: (error) => {
+        console.error(error);
+        this.toastrService.error(error.error.message, 'User Notification');
+        this.isSubmitting = false;
       }
-      const selectedRoleIds = this.getSelectedRoleId();
-      selectedRoleIds.forEach(roleId => {
-        formData.append('roleId', roleId.toString());
-      });
-      //   for (const [key, value] of (formData as any).entries()) {
-      //     console.log(`${key}:`, value);
-      // }
-      this.signUpService.signUp(formData).subscribe({
-        next: (res) => {
-          this.toastrService.success(`user created successfully`,`User Notification`)
-          this.isSubmitting = false;
-          this.router.navigate(['/admin']);
-        },
-        error: (error) => {
-          this.toastrService.error(`can't create new user, check again`,`User Notification`)
-          this.isSubmitting = false;
-        }
-      })
-    }
-
-
+    });
+  } else {
+    console.error('Form Errors:', this.signUpForm.errors);
+    console.log('Form Controls:', this.signUpForm.controls);
+    console.log('loi roi');
   }
+}
 
   onFileSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -99,5 +85,23 @@ export class SignUpComponent implements OnInit {
   getSelectedRoleId(): number[] {
     return this.roles.map((role, index) => this.rolesFormArray.at(index).value ? role.id : null)
       .filter(id => id != null);
+  }
+
+  private createFormData(): FormData {
+    const formData = new FormData();
+    formData.append('username', this.signUpForm.value.username);
+    formData.append('password', this.signUpForm.value.password);
+    formData.append('rePassword', this.signUpForm.value.rePassword);
+    formData.append('fullName', this.signUpForm.value.fullName);
+    formData.append('email', this.signUpForm.value.email);
+    formData.append('phone', this.signUpForm.value.phone);
+    if (this.signUpForm.value.image) {
+      formData.append('image', this.signUpForm.value.image);
+    }
+    const selectedRoleIds = this.getSelectedRoleId();
+    selectedRoleIds.forEach(roleId => {
+      formData.append('roleId', roleId.toString());
+    });
+    return formData;
   }
 }

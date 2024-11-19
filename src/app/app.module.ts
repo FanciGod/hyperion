@@ -8,9 +8,9 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { RouterModule } from '@angular/router';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { myStompConfig } from '../../stomp.config';
-import { interceptor } from './interceptor.interceptor';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
-import { ToastrModule } from 'ngx-toastr'; 
+import { Interceptor } from './interceptor.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -23,13 +23,14 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserModule,
     AppRoutingModule,
     RouterModule,
-        BrowserAnimationsModule, 
-    ToastrModule.forRoot(), 
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     provideHttpClient(withFetch(), withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: interceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true },
     { provide: InjectableRxStompConfig, useValue: myStompConfig },
     { provide: RxStompService, useFactory: rxStompServiceFactory, deps: [InjectableRxStompConfig] }
   ],

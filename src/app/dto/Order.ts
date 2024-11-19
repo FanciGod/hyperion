@@ -7,7 +7,7 @@ export interface Order {
     phoneNumber: string;
     address: string;
     note: string;
-    createdAt: Date;  // Array of [year, month, day, hour, minute, second]
+    createdAt: Date;  
     status: string;
     paymentMethodResponse: PaymentMethod;
     paymentUrl:string | null;

@@ -27,7 +27,7 @@ import { myStompConfig } from '../../../stomp.config';
 
 
 const routes: Routes = [{
-  path: '', component: LayoutComponent, canActivate: [AuthGuard], children: [
+  path: '', component: LayoutComponent, canActivateChild: [AuthGuard], children: [
     { path: 'dashboard', component: DashboardComponent },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'blog', component: BlogComponent },

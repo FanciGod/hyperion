@@ -1,7 +1,6 @@
 <div class="container mt-3">
     <h2>Update Product sub category </h2>
     <form [formGroup]="subCategoryForm" (ngSubmit)="onSubmit()">
-      <!-- Name -->
       <div class="mb-3">
         <label for="name">Name</label>
         <input type="text" id="name" class="form-control" formControlName="name" placeholder="Enter product name" />
@@ -11,7 +10,6 @@
       </div>
   
     
-      <!-- Thumbnail Image -->
       <div class="mb-3">
         <label for="thumbnail">Thumbnail Image</label>
         <input type="file" id="thumbnail" class="form-control" (change)="onFileChange($event)" />
@@ -20,9 +18,6 @@
         </div>
       </div>
 
-
-  
-      <!-- Description with TinyMCE Editor -->
       <div class="mb-3">
         <label for="description">Description</label>
         <editor formControlName="description" apiKey="82zjfv71ttfqp08cvqel6a06gj0ytkmo5k09lkssw79fdrtk"

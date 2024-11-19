@@ -14,7 +14,6 @@
                 [value]="productDetailForm.get('product')?.value" readonly />
         </div>
 
-
         <div class="mb-3">
             <label for="color">Color</label>
             <select id="color" class="form-control" formControlName="colorId">
@@ -26,7 +25,6 @@
             </div>
         </div>
 
-
         <div class="mb-3">
             <label for="handlebar">Handlebar Style</label>
             <select id="handlebar" class="form-control" formControlName="handlebarId">
@@ -35,7 +33,6 @@
             </select>
         </div>
 
-
         <div class="mb-3">
             <label for="material">Material</label>
             <select id="material" class="form-control" formControlName="materialId">
@@ -43,7 +40,6 @@
                 <option *ngFor="let material of materials" [value]="material.id">{{ material.material }}</option>
             </select>
         </div>
-
 
         <div class="mb-3">
             <label for="stock">Stock</label>
@@ -55,7 +51,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="images">Current images</label>
+            <label for="images">Current Images</label>
             <div class="image-row" *ngIf="productDetail?.productImageResponseList" appDivDragger>
                 <div *ngFor="let img of productDetail.productImageResponseList" class="images"
                     style="position: relative;">
@@ -70,9 +66,8 @@
             </div>
         </div>
 
-
         <div class="mb-3">
-            <label for="images">Add more images</label>
+            <label for="images">Add More Images</label>
             <input type="file" id="images" class="form-control" (change)="onFileChange($event)" multiple />
             <div class="mt-2" *ngIf="selectedImages.length > 0">
                 <div class="image-row" appDivDragger>
@@ -84,7 +79,6 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary" [disabled]="productDetailForm.invalid" (click)="onSubmit()">Update
-            Product Detail</button>
+        <button type="submit" class="btn btn-primary" [disabled]="productDetailForm.invalid">Update Product Detail</button>
     </form>
 </div>

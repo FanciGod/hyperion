@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
         next: (res) => {
           localStorage.setItem("token", res.result.token);
           this.authService.decodeToken(res.result.token)
-          console.log(this.authService.getUserInfo())
           this.router.navigate(['/admin/dashboard'])
         },
         error: () => {
@@ -41,7 +40,4 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  loginWithGoogle(): void {
-    console.log('Google login clicked');
-  }
 }

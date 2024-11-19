@@ -81,11 +81,6 @@ export class UpdateProductComponent {
         formData.append('thumbnail', thumbnail);
       }
 
-
-
-      for (const [key, value] of (formData as any).entries()) {
-        console.log(`${key}:`, value);
-      }
       this.productService.updateProductById(this.productId, formData).subscribe({
         next: (res) => {
           this.isSubmitting = false;

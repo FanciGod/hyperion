@@ -18,11 +18,16 @@ export class BlogComponent implements OnInit {
   pageAmount: number[] = [];
   totalPages: number | undefined;
   targetPage: number | undefined;
-  constructor(private blogService: BlogService, private toastrService: ToastrService, private authService: AuthService) { }
+
+  constructor(
+    private blogService: BlogService, 
+    private toastrService: ToastrService, 
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.getAllBlogs()
-    this.getUserInfo()
+    this.getAllBlogs();
+    this.getUserInfo();
   }
 
   getAllBlogs() {
@@ -30,71 +35,68 @@ export class BlogComponent implements OnInit {
       next: (res) => {
         this.allBlogs = res.result.content;
         this.totalPages = res.result.totalPages;
-        this.pageAmount = [];
         this.pageAmount = this.getPageAmount();
-        console.log(this.allBlogs);
+      },
+      error: () => {
+        this.toastrService.error('Failed to load blogs', 'Blog Notification');
       }
-    })
+    });
   }
 
   getUserInfo() {
     this.userInfo = this.authService.getUserInfo();
-    this.userInfo?.scope
   }
 
   checkScope(roles: string[]): boolean {
-    return roles.some(role => this.userInfo?.scope.includes(role))
+    return roles.some(role => this.userInfo?.scope.includes(role));
   }
 
   deleteBlogById(id: number) {
     this.blogService.deleteBlogById(id).subscribe({
-      next: (res) => {
-        this.toastrService.success(`deleted successfully`, 'Blog Notification');
+      next: () => {
+        this.toastrService.success('Blog deleted successfully', 'Blog Notification');
         this.getAllBlogs();
       },
       error: () => {
-        this.toastrService.success(`can't delete, check again`, 'Blog Notification');
+        this.toastrService.error("Can't delete blog. Please try again.", 'Blog Notification');
       }
-    })
+    });
   }
 
-  getPageAmount(): any[] {
-    if (this.totalPages)
+  getPageAmount(): number[] {
+    const pages = [];
+    if (this.totalPages) {
       for (let i = 1; i <= this.totalPages; i++) {
-        this.pageAmount.push(i);
+        pages.push(i);
       }
-    return this.pageAmount;
+    }
+    return pages;
   }
 
   changePage(page: number) {
     this.currentPage = page;
     this.getAllBlogs();
-
   }
 
   goToPage() {
-    if (this.totalPages)
+    if (this.totalPages) {
       if (this.targetPage && this.targetPage >= 1 && this.targetPage <= this.totalPages) {
         this.changePage(this.targetPage);
-        this.targetPage == null;
+        this.targetPage = undefined;
       } else {
-        this.toastrService.error(`can't navigate, please enter again`, 'navigate Notification');
+        this.toastrService.error("Invalid page number. Please enter a valid page.", 'Navigate Notification');
       }
+    }
   }
 
   setCarousel(id: number) {
     this.blogService.setCarousel(id).subscribe({
       next: () => {
-        console.log('done');
         this.toastrService.success('Carousel set successfully', 'Carousel Notification');
       },
-      error: (err) => {
-        console.error("Error setting carousel:", err);
-        this.toastrService.error(`can't set carousel, please check again`, 'Carousel Notification');
+      error: () => {
+        this.toastrService.error("Can't set carousel. Please try again.", 'Carousel Notification');
       }
-    })
+    });
   }
-
-
-
 }

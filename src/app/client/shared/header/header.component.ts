@@ -26,7 +26,7 @@ export class HeaderComponent {
 
   ngOnInit(): void {
     this.getData()
-    this.cartService.getCartObservable().subscribe((cartItems: CartItem[]) => {
+    this.cartService.getCartObservable().subscribe((cartItems) => {
       this.cart = cartItems;
       this.cart.forEach(cart => console.log(cart))
       this.totalPrice = this.cart.reduce((sum, item) => {
@@ -38,10 +38,10 @@ export class HeaderComponent {
 
 
   getData() {
-    this.headerService.getAllProductCategories().subscribe((res: { result: { content: ProductCategories[]; }; }) => {
+    this.headerService.getAllProductCategories().subscribe((res) => {
       this.categories = res.result.content;
       this.categories.forEach((result, index) => {
-        this.headerService.getAllProductSubCategories(result.id).subscribe((res: { result: { content: any[]; }; }) => {
+        this.headerService.getAllProductSubCategories(result.id).subscribe((res) => {
           res.result.content.forEach((result: ProductSubCategories, index: any) => {
             this.subCategories.push(result);
           })
@@ -79,8 +79,8 @@ export class HeaderComponent {
   }
 
   increase(item: CartItem) {
-  
-    if(item.amount < item.productDetail.stock){
+
+    if (item.amount < item.productDetail.stock) {
       item.amount++;
     }
     this.updateCart()

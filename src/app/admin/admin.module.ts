@@ -16,7 +16,6 @@ import { SignUpComponent } from './feature/sign-up/sign-up.component';
 import { UsersComponent } from './feature/users/users.component';
 import { UpdateUserComponent } from './feature/users/update-user/update-user.component';
 import { CreateProductComponent } from './feature/product/create-product/create-product.component';
-import { CreateProductDetailComponent } from './feature/product-detail/create-product-detail/create-product-detail.component';
 import { UpdateProductComponent } from './feature/product/update-product/update-product.component';
 import { DivDraggerDirective } from './directive/div-dragger.directive';
 import { UpdateProductDetailComponent } from './feature/product-detail/update-product-detail/update-product-detail.component';
@@ -25,9 +24,8 @@ import { CreateSubCategoryComponent } from './feature/product/create-sub-categor
 import { UpdateSubCategoryComponent } from './feature/product/update-sub-category/update-sub-category.component';
 import { OrderComponent } from './feature/order/order.component';
 import { NotificationComponent } from './feature/notification/notification.component';
-
-
-
+import { BaseChartDirective, provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { CreateProductDetailComponent } from './feature/product-detail/create-product-detail/create-product-detail.component';
 
 
 @NgModule({
@@ -53,6 +51,7 @@ import { NotificationComponent } from './feature/notification/notification.compo
     UpdateSubCategoryComponent,
     OrderComponent,
     NotificationComponent
+
   ],
   imports: [
     CommonModule,
@@ -60,6 +59,9 @@ import { NotificationComponent } from './feature/notification/notification.compo
     FormsModule,
     EditorModule,
     ReactiveFormsModule,
+    BaseChartDirective
+    
   ],
+  providers: [provideCharts(withDefaultRegisterables())],
 })
 export class AdminModule { }

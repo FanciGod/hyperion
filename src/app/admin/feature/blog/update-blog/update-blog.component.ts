@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BlogCategories } from '../../../../dto/BlogCategories';
 import { BlogService } from '../../../service/blog.service';
 import { Blogs } from '../../../../dto/Blog';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-blog',
@@ -17,7 +18,7 @@ export class UpdateBlogComponent {
   blogCategories: BlogCategories[] = [];
   isSubmitting = false;
 
-  constructor(private blogService: BlogService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute) {
+  constructor(private blogService: BlogService, private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private toastrService:ToastrService) {
     this.blogForm = this.fb.group({
       title: ['', [Validators.required]],
       subTitle: ['', [Validators.required]],
@@ -70,14 +71,14 @@ export class UpdateBlogComponent {
       this.blogService.updateBlogById(this.blogId, formData).subscribe({
 
         next: (res) => {
-          alert("your blog was updated successfully")
+          this.toastrService.success('Your blog was updated successfully', 'Blog Notification')
           this.isSubmitting = false
           this.router.navigate(['/admin/blog']);
 
         },
         error: (err) => {
           this.isSubmitting = false
-          console.error('Error updating blog', err);
+          this.toastrService.error(`Error updateing blog`, 'Blog Notification');
 
         }
       })

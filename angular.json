@@ -47,12 +47,11 @@
             "styles": [
               "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/quill/dist/quill.snow.css",
+
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
-              "node_modules/quill/dist/quill.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
@@ -61,8 +60,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1.2mb",
+                  "maximumError": "1.5mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -113,12 +112,12 @@
             "styles": [
               "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/quill/dist/quill.snow.css",
+
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [
-              "node_modules/quill/dist/quill.js",
+
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           }

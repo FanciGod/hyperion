@@ -11,32 +11,28 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CreateCategoryComponent {
   isSubmitting = false;
-  categoryForm!: FormGroup
+  categoryForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private productService: ProductService, private router: Router, private toastrService:ToastrService) {
+  constructor(private fb: FormBuilder, private productService: ProductService, private router: Router, private toastrService: ToastrService) {
     this.categoryForm = this.fb.group({
       name: ['', [Validators.required]],
-
     });
   }
 
   onSubmit() {
     if (this.categoryForm.valid) {
-      this.isSubmitting= true;
+      this.isSubmitting = true;
       this.productService.createNewCategory(this.categoryForm.value).subscribe({
-        next:()=>{
-          this.isSubmitting= false;
-          this.toastrService.success(`Category created successfully`, 'Category Notification');
+        next: () => {
+          this.isSubmitting = false;
+          this.toastrService.success('Category created successfully', 'Category Notification');
           this.router.navigate(['admin/product']);
         },
-        error:(err)=>{
+        error: (err) => {
           this.isSubmitting = false;
-          this.toastrService.error(`can't create new category`, 'Category Notification');
-          console.log(err)
+          this.toastrService.error("Can't create new category", 'Category Notification');
         }
-      })
+      });
     }
-
   }
-
 }

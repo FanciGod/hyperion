@@ -19,7 +19,7 @@ export class CreateProductComponent implements OnInit {
   selectedThumbnail: File | null = null;
   thumbnailError: string | null = null;
 
-  constructor(private fb: FormBuilder, private productService: ProductService, private router: Router, private toastrService:ToastrService) { }
+  constructor(private fb: FormBuilder, private productService: ProductService, private router: Router, private toastrService: ToastrService) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -69,7 +69,7 @@ export class CreateProductComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      this.productForm.get('thumbnail')?.setValue(file); // Cập nhật giá trị của thumbnail
+      this.productForm.get('thumbnail')?.setValue(file);
     }
   }
 
@@ -90,16 +90,9 @@ export class CreateProductComponent implements OnInit {
           this.router.navigate(['/admin/product/create/new-product-detail'], { state: { productName: this.productForm.get('name')?.value } });
         }, error: () => {
           this.isSubmitting = false;
-          this.toastrService.error(`can't create new product`, 'Product Notification')
+          this.toastrService.error(`Can't create new product`, 'Product Notification');
         }
-      })
-
-      // Object.keys(this.productForm.controls).forEach(key => {
-      //   formData.append(key, this.productForm.get(key)?.value);
-      // });
-      //  for (const [key, value] of (formData as any).entries()) {
-      //     console.log(`${key}:`, value);
-      // }
+      });
     }
   }
 }

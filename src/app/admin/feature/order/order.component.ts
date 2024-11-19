@@ -34,62 +34,65 @@ export class OrderComponent implements OnInit {
         this.isSubmitting = false;
         this.allOrders = res.result.content;
         this.totalPages = res.result.totalPages;
-        this.pageAmount = [];
         this.pageAmount = this.getPageAmount();
-      }, error: (err) => {
+      },
+      error: () => {
         this.isSubmitting = false;
-        this.toastrService.error(`Can't open order`, 'Order Notification');
+        this.toastrService.error(`Can't open orders`, 'Order Notification');
       }
-    })
+    });
   }
+
   getUserInfo() {
     this.userInfo = this.authService.getUserInfo();
-    this.userInfo?.scope
   }
 
   checkScope(roles: string[]): boolean {
-    return roles.some(role => this.userInfo?.scope.includes(role))
+    return roles.some(role => this.userInfo?.scope.includes(role));
   }
 
   confirmOrder(id: number) {
     this.isSubmitting = true;
     this.orderService.confirmOrder(id).subscribe({
-      next: (res) => {
+      next: () => {
         this.isSubmitting = false;
         this.getAllOrders();
-        this.toastrService.success(`order id ${id} is confirmed`, 'Order Notification');
-      }, error: () => {
+        this.toastrService.success(`Order ID ${id} is confirmed`, 'Order Notification');
+      },
+      error: () => {
         this.isSubmitting = false;
-        this.toastrService.error(`can't confirm order id ${id}, check again`, 'Order Notification');
+        this.toastrService.error(`Can't confirm Order ID ${id}, please try again`, 'Order Notification');
       }
-    })
+    });
   }
 
   denyOrder(id: number) {
     this.isSubmitting = true;
     this.orderService.denyOrder(id).subscribe({
-      next: (res) => {
+      next: () => {
         this.isSubmitting = false;
         this.getAllOrders();
-        this.toastrService.success(`order id ${id} is denied`, 'Order Notification');
-      }, error: () => {
+        this.toastrService.success(`Order ID ${id} is denied`, 'Order Notification');
+      },
+      error: () => {
         this.isSubmitting = false;
-        this.toastrService.error(`can't deny order id ${id}, check again`, 'Order Notification');
+        this.toastrService.error(`Can't deny Order ID ${id}, please try again`, 'Order Notification');
       }
-    })
+    });
   }
-
   totalPrice(order: Order): number {
     return order.orderDetailResponseList.reduce((total, detail) => {
       return total + (detail.productDetailResponse.productDto.price * detail.amount);
     }, 0);
   }
 
-  getPageAmount(): any[] {
-    if (this.totalPages)
+  getPageAmount(): number[] {
+    this.pageAmount = []; // Reset mảng trước khi thêm
+    if (this.totalPages) {
       for (let i = 1; i <= this.totalPages; i++) {
         this.pageAmount.push(i);
       }
+    }
     return this.pageAmount;
   }
 
@@ -99,16 +102,16 @@ export class OrderComponent implements OnInit {
   }
 
   goToPage() {
-    if (this.totalPages)
-      if (this.targetPage && this.targetPage >= 1 && this.targetPage <= this.totalPages) {
-        this.changePage(this.targetPage);
-        this.targetPage == null;
-      } else {
-        this.toastrService.error(`can't navigate, please enter again`, 'navigate Notification');
-      }
+    if (this.totalPages && this.targetPage && this.targetPage >= 1 && this.targetPage <= this.totalPages) {
+      this.changePage(this.targetPage);
+      this.targetPage = undefined;  // Corrected this line to reset targetPage
+    } else {
+      this.toastrService.error(`Can't navigate, please enter a valid page number`, 'Navigation Notification');
+    }
   }
 
   navigateNewWindow(id: number) {
-    window.open(`/order/${id}`, '_blank')
+    window.open(`/order/${id}`, '_blank');
   }
 }
+

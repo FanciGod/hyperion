@@ -21,71 +21,64 @@ export class HeaderComponent implements OnInit {
   notificationAlert = false;
   currentNotificationPage: number = 0;
   pageSize: number = 20;
-  constructor(private authService: AuthService,
+
+  constructor(
+    private authService: AuthService,
     private router: Router,
     private headerService: HeaderService,
     private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
-    this.getNotificationFromWebSocket()
+    this.getNotificationFromWebSocket();
     this.getUserInfo();
     this.getCurrentPage();
-    this.getAllNotification();
+    this.getAllNotifications();
   }
 
-  getAllNotification() {
+  getAllNotifications(): void {
     this.notificationService.getAllNotification(this.currentNotificationPage, this.pageSize, Number(this.userInfo?.sub)).subscribe({
       next: (res) => {
-        if(res.result.content.some(noti => noti.notificationStatus == 'NEW')){
-          this.notificationAlert = true;
-        }else{
-          this.notificationAlert = false;
-        }
-      }, error: () => {
-
+        this.notificationAlert = res.result.content.some(noti => noti.notificationStatus === 'NEW');
+      },
+      error: () => {
+        // handle error if needed
       }
-    })
+    });
   }
 
-  navigateToNotification(){
-    this.getAllNotification();
-    this.router.navigate(['/admin/notification'])
+  navigateToNotification(): void {
+    this.getAllNotifications();
+    this.router.navigate(['/admin/notification']);
   }
 
-  getUserInfo() {
+  getUserInfo(): void {
     this.userInfo = this.authService.getUserInfo();
   }
 
-  getCurrentPage() {
+  getCurrentPage(): void {
     this.router.events
       .subscribe(() => {
         const currentUrl = this.router.url;
         const segments = currentUrl.split('/');
         const adminIndex = segments.indexOf('admin');
         this.currentPage = segments.slice(adminIndex + 1).join('/');
-        console.log(this.currentPage);
       });
   }
 
-
-
-
-
-  getNotificationFromWebSocket() {
+  getNotificationFromWebSocket(): void {
     this.headerService.notifications$.subscribe(notification => {
       if (notification) {
         const orderId = notification.orderId;
         const orderStatus = notification.orderStatus;
         this.message = `New order with ID ${orderId} has been ${orderStatus}`;
         this.notificationAlert = true;
-    
         this.showNotification = true;
+
         setTimeout(() => {
           this.showNotification = false;
-        }, 5000); 
+        }, 5000);
       }
     });
   }
 }
-

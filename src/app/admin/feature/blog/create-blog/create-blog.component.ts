@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { BlogService } from '../../../service/blog.service';
 import { BlogCategories } from '../../../../dto/BlogCategories';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/service/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-create-blog',
@@ -18,11 +18,11 @@ export class CreateBlogComponent implements OnInit {
   thumbnailError: string | null = null;
   isSubmitting = false;
 
-  constructor(private blogService: BlogService, private fb: FormBuilder, private router: Router, private authService: AuthService) {
-  }
+  constructor(private blogService: BlogService, private fb: FormBuilder, private router: Router, private authService: AuthService, private toastrService:ToastrService) {}
+
   ngOnInit(): void {
-    this.getAllBlogCategories()
-    this.initForm()
+    this.getAllBlogCategories();
+    this.initForm();
   }
 
   initForm() {
@@ -38,49 +38,65 @@ export class CreateBlogComponent implements OnInit {
     this.blogService.getAllBlogCategories().subscribe({
       next: (res) => {
         this.blogCategories = res.result;
-      }
-    })
+      },
+      error: (err) => console.error('Error fetching blog categories', err)
+    });
   }
 
   onFileChange(event: any) {
     const file: File = event.target.files[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        this.thumbnailError = 'File size must be less than 10 MB';
-      } else {
+      this.thumbnailError = this.validateFileSize(file) ? null : 'File size must be less than 10 MB';
+      if (!this.thumbnailError) {
         this.selectedThumbnail = file;
-        this.thumbnailError = null;
       }
     }
+  }
+
+  validateFileSize(file: File): boolean {
+    return file.size <= 10 * 1024 * 1024; 
+  }
+
+
+  isFormValid(): boolean {
+    return this.blogForm?.valid === true && !!this.selectedThumbnail && !this.thumbnailError;
+  }
+
+  prepareFormData() {
+    const formData = new FormData();
+    formData.append('title', this.blogForm?.get('title')?.value);
+    formData.append('subTitle', this.blogForm?.get('subTitle')?.value);
+    formData.append('blogCategoryId', this.blogForm?.get('category')?.value);
+    formData.append('description', this.blogForm?.get('description')?.value);
+
+    if (this.selectedThumbnail) {
+      formData.append('thumbnail', this.selectedThumbnail);
+    }
+
+    const userId = this.authService.getUserInfo()?.sub.toString();
+    if (userId) {
+      formData.append('userId', userId);
+    }
+
+    return formData;
   }
 
   onSubmit() {
-    if (this.blogForm?.valid && this.selectedThumbnail) {
+    if (this.isFormValid()) {
       this.isSubmitting = true;
-      const formData = new FormData();
-      formData.append('title', this.blogForm.get('title')?.value);
-      formData.append('subTitle', this.blogForm.get('subTitle')?.value);
-      formData.append('blogCategoryId', this.blogForm.get('category')?.value);
-      formData.append('description', this.blogForm.get('description')?.value);
-      formData.append('thumbnail', this.selectedThumbnail);
-      const userId = this.authService.getUserInfo()?.sub.toString();
-      if (userId) {
-        formData.append('userId', userId);
-      }
-      this.blogService.addNewBlog(formData).subscribe({
+      const formData = this.prepareFormData();
 
-        next: (res) => {
-          alert("your blog was sent successfully")
+      this.blogService.addNewBlog(formData).subscribe({
+        next: () => {
+          this.toastrService.success("Created new blog successfully","Blog Notification")
           this.router.navigate(['/admin/blog']);
           this.isSubmitting = false;
-
         },
         error: (err) => {
-          console.error('Error creating blog', err);
+          this.toastrService.error("Can't create new blog","Blog Notification")
           this.isSubmitting = false;
         }
-      })
+      });
     }
   }
-
 }

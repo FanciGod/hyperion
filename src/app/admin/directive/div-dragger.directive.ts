@@ -13,7 +13,6 @@ export class DivDraggerDirective {
 
   constructor(private el: ElementRef) {}
 
-  // Khi nhấn chuột để bắt đầu kéo
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: MouseEvent) {
     event.preventDefault();

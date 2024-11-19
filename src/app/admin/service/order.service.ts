@@ -28,4 +28,6 @@ export class OrderService {
   denyOrder(id:number):Observable<any>{
     return this.http.get<any>(`${this.url}/order/deny/${id}`)
   }
+
+  
 }

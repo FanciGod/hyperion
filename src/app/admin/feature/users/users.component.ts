@@ -7,36 +7,44 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrl: './users.component.scss'
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  Users: User[] = [];
-  constructor(private usersService: UsersService, private router: Router, private toastrService: ToastrService) { }
+  users: User[] = [];
+
+  constructor(
+    private usersService: UsersService,
+    private router: Router,
+    private toastrService: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.getAllUsers()
+    this.getAllUsers();
   }
 
-  getAllUsers() {
+  private getAllUsers(): void {
     this.usersService.getAllUser().subscribe({
       next: (res) => {
-        this.Users = res.result;
+        this.users = res.result;
       }
-    })
+    });
   }
 
-  deleteUser(id: number) {
+  deleteUser(id: number): void {
     this.usersService.deleteUserById(id).subscribe({
-      next: (res) => {
-
-        this.toastrService.success(`user deleted successfully`, `User Notification`)
-        this.getAllUsers()
+      next: () => {
+        this.toastrService.success('User deleted successfully', 'User Notification');
+        this.getAllUsers();
       },
-      error: (error) => {
-        this.toastrService.success(`can't delete user, check again`, `User Notification`)
+      error: () => {
+        this.toastrService.error("Can't delete user, please try again", 'User Notification');
       }
-    })
+    });
   }
 
-
+  checkScope(roles: string[]): boolean {
+    // Implement role-check logic here, for example:
+    const currentUserRoles = ['ADMIN', 'SALE']; // Replace with actual roles from the current session
+    return roles.some(role => currentUserRoles.includes(role));
+  }
 }

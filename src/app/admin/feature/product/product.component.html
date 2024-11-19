@@ -14,7 +14,6 @@
             <div class="d-flex justify-content-between">
                 <span (click)="toggleCategory(category.id)">{{ category.name }}</span>
                 <div>
-                    
                     <button class="btn btn-danger"  (click)="deleteProductCategoryById(category.id)">Delete category</button>
                 </div>
             </div>
@@ -34,21 +33,15 @@
                             <div class="product-name d-flex justify-content-between mt-5">
                                 <span (click)="toggleProduct(product.id)">{{ product.name }}</span>
                                 <div class="action">
-                                    <button class="btn btn-primary" [routerLink]="['update',product.id]"> Update
-                                        Product</button>
-                                    <button class="btn btn-success"
-                                        [routerLink]="['create/new-product-detail',product.id]"> Create product
-                                        detail</button>
-                                    <button class="btn btn-danger" (click)="deleteProduct(product.id)"> Delete
-                                        product</button>
+                                    <button class="btn btn-primary" [routerLink]="['update',product.id]"> Update Product</button>
+                                    <button class="btn btn-success" [routerLink]="['create/new-product-detail',product.id]"> Create product detail</button>
+                                    <button class="btn btn-danger" (click)="deleteProduct(product.id)"> Delete product</button>
                                 </div>
-
                             </div>
                             <hr>
                             <table class="table table-hover table-bordered table-striped text-center align-middle">
                                 <thead class="table-primary ">
                                     <tr>
-
                                         <th scope="col">Price</th>
                                         <th scope="col">Weight</th>
                                         <th scope="col">Stock</th>
@@ -60,18 +53,15 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let detail of product.productDetailDtoList">
-
                                         <td>{{ product.price }}</td>
                                         <td>{{ product.weight }}</td>
                                         <td>{{ detail.stock }}</td>
                                         <td>{{ detail.productColorDto.color }}</td>
-                                        <td>{{ detail.productHandlebarDto?.style }}</td>
-                                        <td>{{ detail.productMaterialDto?.material }}</td>
+                                        <td *ngIf="hasHandlebarStyle(product)">{{ detail.productHandlebarDto?.style }}</td>
+                                        <td  *ngIf="hasMaterial(product)">{{ detail.productMaterialDto?.material }}</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm"
-                                                [routerLink]="['update/product-detail',detail.id]">Edit</button>
-                                            <button class="btn btn-danger btn-sm"
-                                                (click)="deleteProductDetail(detail.id)">Delete</button>
+                                            <button class="btn btn-primary btn-sm" [routerLink]="['update/product-detail',detail.id]">Edit</button>
+                                            <button class="btn btn-danger btn-sm" (click)="deleteProductDetail(detail.id)">Delete</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -82,6 +72,4 @@
             </ul>
         </li>
     </ul>
-
-
 </div>
