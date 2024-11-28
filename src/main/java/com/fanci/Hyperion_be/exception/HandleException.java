@@ -2,6 +2,7 @@ package com.fanci.Hyperion_be.exception;
 
 
 import com.fanci.Hyperion_be.dto.response.ApiResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,6 +38,15 @@ public class HandleException {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<?>> handleJsonParseError(HttpMessageNotReadableException ex) {
+        ErrorCode errorCode = ErrorCode.JSON_PARSE_ERROR;
+        return ResponseEntity.status(errorCode.getHttpStatusCode()).body(ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build());
+    }
+
+    @ExceptionHandler(JsonProcessingException.class)
+    public ResponseEntity<ApiResponse<?>> handleJsonProcessingException(JsonProcessingException ex) {
         ErrorCode errorCode = ErrorCode.JSON_PARSE_ERROR;
         return ResponseEntity.status(errorCode.getHttpStatusCode()).body(ApiResponse.builder()
                 .code(errorCode.getCode())

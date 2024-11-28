@@ -34,7 +34,7 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {"/auth/login", "/auth/introspect", "auth/logout", "/auth/refresh", "/payment-method",
             "/notification/set-to-read/**", "/notification/**", "/paypal", "order/**", "/order", "/image/**", "/material", "/handlebar", "/color"
             , "/blog/all", "/blog", "/blog/**", "/product-sub-categories", "/product-sub-categories/**", "/product-categories", "/product-categories/all", "/product/name", "/product/**",
-            "/product/name", "/product-detail", "/product-detail/**", "blog-categories", "/blog/carousel", "/ws-notifications/websocket", "/order/pending/**"};
+            "/product/name", "/product-detail", "/product-detail/**", "blog-categories", "/blog/carousel", "/ws-notifications/websocket", "/order/pending/**", "/chat"};
 
     public SecurityConfig(JwtDecoder jwtDecoder) {
         this.jwtDecoder = jwtDecoder;

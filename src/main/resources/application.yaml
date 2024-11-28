@@ -34,3 +34,6 @@ jwt:
   signerKey: "u1w4lfbIlOqekNYgl0FMfLqEMeICbkOA8lHyyJm9iXU/ZH5uxuz0Wle1+lNOm3Yi"
   valid-duration: 5
   refreshable-duration: 40000
+
+gpt:
+  apiKey: ""
