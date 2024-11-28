@@ -18,6 +18,7 @@ import { ProductDetailComponent } from './feature/product-detail/product-detail.
 import { CheckoutComponent } from './feature/checkout/checkout.component';
 import { PaymentComponent } from './feature/payment/payment.component';
 import { OrderComponent } from './feature/order/order.component';
+import { ChatboxComponent } from './shared/chatbox/chatbox.component';
 
 
 
@@ -37,7 +38,8 @@ import { OrderComponent } from './feature/order/order.component';
     ProductDetailComponent,
     CheckoutComponent,
     PaymentComponent,
-    OrderComponent
+    OrderComponent,
+    ChatboxComponent
 
   ],
   imports: [

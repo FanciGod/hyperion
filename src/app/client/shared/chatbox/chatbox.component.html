@@ -1,0 +1,25 @@
+<div class="icon" [ngClass]="{'hidden': isChatboxVisible}" >
+    <button (click)="toggleChatbox()"
+        style="background: none; border: none; padding: 0; cursor: pointer;">
+        <img src="https://img.freepik.com/premium-vector/chat-bot-logo-smiling-virtual-assistant-bot-smiles-icon-logo-robot-head-with-headphones_843540-91.jpg?fbclid=IwZXh0bgNhZW0CMTAAAR3yJZ7SwY4zJpUsGG4yT5k1VRJp723NToxOVfd6LnJ75bzh2mFosNbhztI_aem_3HxjEh2vkHivRBsGWrRoJw"
+            alt="ChatGPT Logo" width="50" height="50" style=" border-radius: 40px;">
+    </button>
+</div>
+
+
+<div class="chatbox" [ngClass]="{'hidden': !isChatboxVisible}">
+    <div class="chatbox-header">
+        <span> Chat with us!</span>
+        <span class="close-button" (click)="toggleChatbox()">&#8211;</span>
+    </div>
+
+    <div class="chatbox-response">
+        <p *ngIf="assistantMessage === '' "><strong>Hyperion:</strong> Ask me something...</p>
+        <p *ngIf="assistantMessage !== '' "><strong>Hyperion:</strong> {{ assistantMessage }}</p>
+    </div>
+
+    <div class="chatbox-request">
+        <textarea (keydown)="handleKeydown($event)" [(ngModel)]="userMessage"
+            placeholder="Type your message here"></textarea>
+    </div>
+</div>

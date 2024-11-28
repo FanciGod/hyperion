@@ -57,6 +57,7 @@ export class Interceptor implements HttpInterceptor {
               return next.handle(newReq);
             }),
             catchError(() => {
+              window.location.reload();
               return throwError(() => new Error('Session expired.'));
             })
           );
